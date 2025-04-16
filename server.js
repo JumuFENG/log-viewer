@@ -22,11 +22,34 @@ app.get('/api/logs', (req, res) => {
   const filePath = path.join(LOG_DIR, filename);
   if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'Log file not found' });
 
+  const mergeLogLines = function(lines) {
+    const timestampRegex = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}/;
+    const logLevelRegex = /(DEBUG|INFO|WARN|ERROR)/i;
+    const mergedLines = [];
+
+    for (let i = 0; i < lines.length; i++) {
+        const currentLine = lines[i];
+        const hasTimestamp = timestampRegex.test(currentLine);
+        const hasLogLevel = logLevelRegex.test(currentLine);
+        if (hasTimestamp || hasLogLevel) {
+            mergedLines.push(currentLine);
+        } else {
+            if (mergedLines.length > 0) {
+                mergedLines[mergedLines.length - 1] += '\n' + currentLine;
+            } else {
+                mergedLines.push(currentLine);
+            }
+        }
+    }
+
+    return mergedLines;
+  }
+
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) return res.status(500).json({ error: 'Error reading file' });
 
     let lines = data.split('\n').filter(Boolean);
-    res.json({ logs: lines });
+    res.json({ logs: mergeLogLines(lines) });
   });
 });
 
