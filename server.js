@@ -24,7 +24,7 @@ app.get('/api/logs', (req, res) => {
 
   const mergeLogLines = function(lines) {
     const timestampRegex = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}/;
-    const logLevelRegex = /(DEBUG|INFO|WARN|ERROR)/i;
+    const logLevelRegex = /\b(DEBUG|INFO|WARN|ERROR)\b/i;
     const mergedLines = [];
 
     for (let i = 0; i < lines.length; i++) {
