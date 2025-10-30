@@ -1,0 +1,13 @@
+services:
+  log-viewer:
+    image: log-viewer:latest
+    container_name: logger
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /Users/chuazhou/dev/log-viewer/logs:/app/logs
+      - /Users/chuazhou/dev/log-viewer/public:/app/public
+      - /Users/chuazhou/dev/log-viewer/server.js:/app/server.js
+    ports:
+      - "5179:5179"
+    restart: unless-stopped
