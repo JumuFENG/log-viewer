@@ -41,7 +41,11 @@
 4. 打开浏览器访问：http://localhost:3000。
 
 #### 使用 Docker
-1. 拉取镜像并运行：
+1. 克隆仓库：
+   ```bash
+   git clone https://github.com/JumuFENG/log-viewer.git
+   cd log-viewer
+2. 构建镜像并运行：
    ```bash
     docker build -t log-viewer .
     docker run -p 3000:3000 log-viewer
